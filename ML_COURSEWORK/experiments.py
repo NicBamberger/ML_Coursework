@@ -33,32 +33,42 @@ def feature_sets(matrix, n_splits=4):
     return feature_set_dict
 
 
-def apply_grid_search(feature_sets, target):
+def apply_grid_search(feature_sets, target, feature_set_names):
 
     # apply grid search to all our sets of features
     feature_valid_errors = []
+    all_errors_list = []
     optimals = []
     for i, features in enumerate(feature_sets.values()):
-        print(f"\n\nSet {i+1}:\n")
+        print(f"\n\n{list(feature_set_names)[i]} (Feature set {i+1}/5):\n")
         # contains the optimal hyperparameters
         # and the mean and stdev (of the errors from each fold)
         all_errors, optimal = Gx.grid_search(features, target)  
 
         optimals.append(optimal) 
+        all_errors_list.append(all_errors)
         feature_valid_errors.append(optimal.mean_error)
-    
-    return optimals, feature_valid_errors
+
+    return all_errors_list, optimals, feature_valid_errors
 
 
-def choose_best_model(feature_set_dict, optimals, feature_valid_errors):
+def choose_best_model(feature_set_dict, optimals, feature_valid_errors, all_errors_list):
 
     hyperparameter_choices = dict(zip(feature_set_dict.keys(), optimals))
+    all_errors_dict = dict(zip(feature_set_dict.keys(), all_errors_list))
+
     valid_errors = dict(zip(feature_set_dict.keys(), feature_valid_errors))
     lowest_error_idx = pd.Series(valid_errors).argmin()
     optimal_feature_set_name = list(valid_errors)[lowest_error_idx]
 
     # print baseline error
+    print()
     print(f"Baseline model error: {round(hyperparameter_choices['base'].mean_error, 3)}")
+
+    print(f"Best set of features: {optimal_feature_set_name}")
+    print()
+    print("Hyperparameter grid search for best set of features:")
+    print(all_errors_dict[optimal_feature_set_name])
 
     # calculating confidence interval
     z = scipy.stats.norm.ppf(.95)
@@ -98,9 +108,21 @@ def main():
     
     matrix, target = load_data()
     feature_set_dict = feature_sets(matrix, n_splits=4)
-    optimals, feature_valid_errors = apply_grid_search(feature_set_dict, target)
-    optimal_feature_set_name, mu, conf_interval = choose_best_model(feature_set_dict, optimals, feature_valid_errors)
+
+    i= 1
+    for k, v in feature_set_dict.items():
+        print(f"Feature set {i}: {k}")
+        print(v)
+        print()
+        i+=1
+
+    print("Starting Grid Search:")
+    all_errors_list, optimals, feature_valid_errors = apply_grid_search(feature_set_dict, target, feature_set_dict.keys())
+    optimal_feature_set_name, mu, conf_interval = choose_best_model(feature_set_dict, optimals, feature_valid_errors, all_errors_list)
     
+    print()
+    print("Best validation error for each set of features:")
+    print(pd.Series(dict(zip(feature_set_dict.keys(), feature_valid_errors))))
     print(f"Best feature set: {optimal_feature_set_name}")
     print(f"Mean error and 95% confidence interval of error: {round(mu, 3)}, {conf_interval}")
     
@@ -108,11 +130,14 @@ def main():
     optimal_hps = optimal_dict[optimal_feature_set_name] 
     features = feature_set_dict[optimal_feature_set_name]
 
+    error_test_base, y_test_probs_base = test_results(feature_set_dict["base"], target, optimal_dict["base"])
     error_test, y_test_probs = test_results(features, target, optimal_hps)
 
-    print(f"Test error (log loss): {round(error_test, 3)}")
+    print(f"Test error (log loss): {error_test}")
 
-    pd.DataFrame(y_test_probs).plot()
+    pd.DataFrame(y_test_probs_base).plot(label="base")
+    pd.DataFrame(y_test_probs).plot(label=optimal_feature_set_name)
+    plt.legend()
     plt.show()
 
 main()

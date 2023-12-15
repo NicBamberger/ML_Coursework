@@ -133,21 +133,13 @@ class Gx:
             }
             folds.append(fold)
 
-            # test one fold
-            if f < 0:
-                print(f"For fold {f}")
-                print(f"\ttrain_inputs.shape = {CV_X_train.shape}")
-                print(f"\ttrain_targets.shape = {CV_y_train.shape}")
-                print(f"\tvalid_inputs.shape = {CV_X_valid.shape}")
-                print(f"\tvalid_targets.shape = {CV_y_valid.shape}")
-
         return folds
 
     def grid_search(features, target):
         
         # try 5 X 5
-        max_depth_list = np.linspace(3, 11, 2)
-        min_impurity_decrease_list = np.linspace(0, 0.1, 2)
+        max_depth_list = np.linspace(3, 11, 1)
+        min_impurity_decrease_list = np.linspace(0, 0.1, 1)
 
         n_hyperparamter_choices = len(max_depth_list) * len(min_impurity_decrease_list)
         all_errors = pd.DataFrame(index=range(n_hyperparamter_choices), 
