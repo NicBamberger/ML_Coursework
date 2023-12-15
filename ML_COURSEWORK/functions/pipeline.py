@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import log_loss, accuracy_score
 
+from sklearn import ensemble
 import os
 
 N_SUBJECTS = 10
@@ -13,8 +14,9 @@ N_TRIALS = N_SUBJECTS * N_CONDITIONS * N_REPS
 TRAIN_SUBJECTS = 7
 TRAIN_TRIALS = N_TRIALS * TRAIN_SUBJECTS / N_SUBJECTS
 
-# functions that our group have created
+N_ESTIMATORS = 500
 
+# functions that our group have created
 class Gx:
 
     def processing(
@@ -45,6 +47,31 @@ class Gx:
 
         return matrix, target
     
+    def create_feature_sets(matrix: pd.DataFrame, n_splits: int): 
+        means = matrix.groupby("trial").mean()
+        means.columns=[f"{col}_mean" for col in matrix.columns]
+
+        time_split_range = range(1, n_splits + 1)
+        covs_n = []
+
+        for j in time_split_range:
+            n_time_splits = j
+            time_splits = Gx.get_time_splits(matrix, n_time_splits)
+            corrs = pd.DataFrame()
+            covs = pd.DataFrame()
+
+            for i in range(n_time_splits):
+                for body_part in ["ankle", "knee"]:
+                    band = time_splits[i]
+                    body_parts = band[[f"left_{body_part}", f"right_{body_part}"]]
+                    covs[f"{body_part}_{n_time_splits}_{i+1}"] = body_parts.groupby(["trial"]).cov().groupby("trial")[f"right_{body_part}"].first()
+
+            covs_n.append(covs)
+
+        feature_sets = [means] + covs_n
+
+        return feature_sets
+
     def get_time_splits(
         matrix: pd.DataFrame, 
         n: int
@@ -107,7 +134,7 @@ class Gx:
             folds.append(fold)
 
             # test one fold
-            if f == 0:
+            if f < 0:
                 print(f"For fold {f}")
                 print(f"\ttrain_inputs.shape = {CV_X_train.shape}")
                 print(f"\ttrain_targets.shape = {CV_y_train.shape}")
@@ -116,11 +143,56 @@ class Gx:
 
         return folds
 
+    def grid_search(features, target):
+
+        max_depth_list = np.linspace(3, 11, 5)
+        min_impurity_decrease_list = np.linspace(0, 0.1, 5)
+
+        n_hyperparamter_choices = len(max_depth_list) * len(min_impurity_decrease_list)
+        all_errors = pd.DataFrame(index=range(n_hyperparamter_choices), 
+                                columns=["max_depth", "min_impurity_decrease", "mean_error", "stdev_error"])
+
+        j=0
+        for max_depth in max_depth_list:
+            for min_impurity_decrease in min_impurity_decrease_list:
+
+                model = ensemble.GradientBoostingClassifier(n_estimators=N_ESTIMATORS, max_depth=int(max_depth), 
+                                                            min_impurity_decrease=float(min_impurity_decrease), 
+                                                            loss="log_loss"
+                                                            )
+
+                X_train, y_train, X_test, y_test = Gx.train_test_split(features, target)
+
+                # here we will use cross validation, leaving out 1 subject each time!
+                n_folds = TRAIN_SUBJECTS
+                cv_splits = Gx.cross_validation_splits(X_train, y_train, n_folds)
+                errors_valid = np.zeros(n_folds)
+
+                for i in range(len(cv_splits)):
+                
+                    CV_X_train, CV_y_train, CV_X_valid, CV_y_valid = cv_splits[i].values()
+                    errors_valid[i], y_probs = Gx.run_model(CV_X_train, CV_y_train, CV_X_valid, CV_y_valid, model)
+
+                all_errors.iloc[j]["max_depth"] = max_depth
+                all_errors.iloc[j]["min_impurity_decrease"] = min_impurity_decrease
+                all_errors.iloc[j]["mean_error"] = np.array(errors_valid).mean()
+                all_errors.iloc[j]["stdev_error"] = np.array(errors_valid).std()
+
+                print(f"{int(100 * (j+1)/n_hyperparamter_choices)}% complete.")
+                j+=1
+
+            all_errors = all_errors.astype(float)
+            min_idx = all_errors.mean_error.argmin()
+            optimal = all_errors.loc[min_idx]
+
+        return all_errors, optimal
+
     def train_test_split(
         features: pd.DataFrame, 
         target: pd.Series
         ):
 
+        # copy so that we don't alter the original variables
         X = features.copy()
         y = target.copy()
 
@@ -144,7 +216,7 @@ class Gx:
         error = log_loss(y_test, y_probs) # wants clear divisions between classes - would work
         
         y_pred = model.predict(X_test)
-        acc = accuracy_score(y_test, y_pred)
-        print(f"Accuracy: {acc}")
+        # acc = accuracy_score(y_test, y_pred)
+        # print(f"Accuracy: {acc}")
 
         return error, y_probs
