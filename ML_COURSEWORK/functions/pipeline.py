@@ -144,7 +144,8 @@ class Gx:
         return folds
 
     def grid_search(features, target):
-
+        
+        # try 5 X 5
         max_depth_list = np.linspace(3, 11, 2)
         min_impurity_decrease_list = np.linspace(0, 0.1, 2)
 
@@ -178,6 +179,7 @@ class Gx:
                 all_errors.iloc[j]["mean_error"] = np.array(errors_valid).mean()
                 all_errors.iloc[j]["stdev_error"] = np.array(errors_valid).std()
 
+                # shows progress in CV
                 print(f"{int(100 * (j+1)/n_hyperparamter_choices)}% complete.")
                 j+=1
 
@@ -216,7 +218,5 @@ class Gx:
         error = log_loss(y_test, y_probs) # wants clear divisions between classes - would work
         
         y_pred = model.predict(X_test)
-        # acc = accuracy_score(y_test, y_pred)
-        # print(f"Accuracy: {acc}")
 
         return error, y_probs

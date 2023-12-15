@@ -40,9 +40,11 @@ def apply_grid_search(feature_sets, target):
     optimals = []
     for i, features in enumerate(feature_sets.values()):
         print(f"\n\nSet {i+1}:\n")
-        all_errors, optimal = Gx.grid_search(features, target)
+        # contains the optimal hyperparameters
+        # and the mean and stdev (of the errors from each fold)
+        all_errors, optimal = Gx.grid_search(features, target)  
 
-        optimals.append(optimal)
+        optimals.append(optimal) 
         feature_valid_errors.append(optimal.mean_error)
     
     return optimals, feature_valid_errors
@@ -55,15 +57,18 @@ def choose_best_model(feature_set_dict, optimals, feature_valid_errors):
     lowest_error_idx = pd.Series(valid_errors).argmin()
     optimal_feature_set_name = list(valid_errors)[lowest_error_idx]
 
-    # create confidence interval
+    # print baseline error
+    print(f"Baseline model error: {round(hyperparameter_choices['base'].mean_error, 3)}")
+
+    # calculating confidence interval
     z = scipy.stats.norm.ppf(.95)
     optimal_hps = hyperparameter_choices[optimal_feature_set_name]
 
     mu = optimal_hps.mean_error
     sigma = optimal_hps.stdev_error 
     lower_conf = mu - z * sigma
-    lower_conf = max(0, lower_conf) # can't have negative error!
-    upper_conf = mu + z * sigma
+    lower_conf = round(max(0, lower_conf), 3) # can't have negative error!
+    upper_conf = round(mu + z * sigma, 3)
     conf_interval = (lower_conf, upper_conf)
     
     return optimal_feature_set_name, mu, conf_interval
@@ -96,7 +101,8 @@ def main():
     optimals, feature_valid_errors = apply_grid_search(feature_set_dict, target)
     optimal_feature_set_name, mu, conf_interval = choose_best_model(feature_set_dict, optimals, feature_valid_errors)
     
-    print(optimal_feature_set_name, mu, conf_interval)
+    print(f"Best feature set: {optimal_feature_set_name}")
+    print(f"Mean error and 95% confidence interval of error: {round(mu, 3)}, {conf_interval}")
     
     optimal_dict = dict(zip(feature_set_dict.keys(), optimals))
     optimal_hps = optimal_dict[optimal_feature_set_name] 
@@ -104,7 +110,7 @@ def main():
 
     error_test, y_test_probs = test_results(features, target, optimal_hps)
 
-    print(error_test)
+    print(f"Test error (log loss): {round(error_test, 3)}")
 
     pd.DataFrame(y_test_probs).plot()
     plt.show()
