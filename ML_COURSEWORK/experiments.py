@@ -15,8 +15,8 @@ np.random.seed(SEED)
 
 
 def load_data():
-    p = os.path.dirname(os.path.realpath(__name__))
-    path = f"{p}/data/data.csv"
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    path = os.path.join(script_dir, "data", "data.csv")
     df = pd.read_csv(path)
     matrix, target = Gx.processing(df)
 
