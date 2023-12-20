@@ -38,16 +38,12 @@ ML_COURSEWORK/
 
 1. **`main.py`**
    - The main runner script that uses command-line arguments to execute specific experiments.
-
 2. **`data`**
    - This directory contains the dataset data.csv used for the machine learning experiments.
-
 3. **`experiments/`**
-   - Contains individual Python scripts for each experiment (experiment_base_0.py, experiment_cov_split_1.py, etc.).
-
+   - Contains individual Python scripts for each experiment **`(experiment_base_0.py, experiment_cov_split_1.py, etc.)`**`.
 4. **`functions/`**
    - Includes pipeline.py which contains the Gx class with all methods required for data processing, feature extraction, model training, and evaluation.
-
 5. **`functions/`**
    - Lists all the necessary Python dependencies for the project.
 
@@ -56,7 +52,7 @@ ML_COURSEWORK/
 
 To set up the project environment, follow these steps:
 
-1. Ensure that Python 3.8 or above is installed on your system.
+1. Ensure that **Python 3.8** or above is installed on your system.
 2. Clone the repository to your local machine.
 3. Navigate to the project directory and create a virtual environment:
    - **`python -m venv venv`**
@@ -70,7 +66,7 @@ To set up the project environment, follow these steps:
 
 ## Running Experiments
 
-To run experiments, use the following command structure from the ML_COURSEWORK directory:
+To run experiments, use the following command structure from the **ML_COURSEWORK** directory:
 
 **`python main.py ML_COURSEWORK/data/data.csv --experiment <EXPERIMENT_NAME>`**
 
@@ -89,7 +85,7 @@ If no experiment name is provided, all experiments will run sequentially.
 
 
 ## Expected Outcomes
-Each script will output the performance measures to the console. The execution time for all experiments should not exceed 10 minutes on a standard consumer desktop machine (CPU only). Each individual experiment will take approximately 2 minutes to run (inlcuding cross_validation and hyperparameter optimisation).
+Each script will output the performance measures to the console. The execution time for all experiments should not exceed 10 minutes on a standard consumer desktop machine (CPU only). Each individual experiment will take approximately 2 minutes to run (inlcuding **cross_validation** and **hyperparameter optimisation**).
 
 The experiment shows that our initial assumption of windowing the dataset to improve model performance was innacurate. The best model is created in Experiment 2 which is using the covariances over the entire dataset **`(covs_split_1)`**. This model is significantly more accurate **`(lower log-loss)`** than the following time splits.
 
