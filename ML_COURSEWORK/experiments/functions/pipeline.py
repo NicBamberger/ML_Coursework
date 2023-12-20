@@ -203,8 +203,8 @@ class Gx:
     def grid_search(features, target):
         
         # try 5 X 5
-        max_depth_list = np.linspace(3, 11, 2)
-        min_impurity_decrease_list = np.linspace(0, 0.1, 2)
+        max_depth_list = np.linspace(3, 11, 5)
+        min_impurity_decrease_list = np.linspace(0, 0.1, 5)
 
         n_hyperparamter_choices = len(max_depth_list) * len(min_impurity_decrease_list)
         all_errors = pd.DataFrame(index=range(n_hyperparamter_choices), 
