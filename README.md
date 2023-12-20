@@ -10,7 +10,7 @@ This repository contains the code for a machine learning classification project 
 
 - **File System**: 
 
-```
+````
 ML_COURSEWORK/
 │
 ├── Content/
@@ -34,7 +34,7 @@ ML_COURSEWORK/
 ├── main.py
 ├── README.md
 └── requirements.txt
- ```
+````
 
 1. **`main.py`**
    - The main runner script that uses command-line arguments to execute specific experiments.
