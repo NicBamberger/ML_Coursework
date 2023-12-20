@@ -59,41 +59,41 @@ To set up the project environment, follow these steps:
 1. Ensure that Python 3.8 or above is installed on your system.
 2. Clone the repository to your local machine.
 3. Navigate to the project directory and create a virtual environment:
-   - **python -m venv venv**
+   - **`python -m venv venv`**
 4. Activate the Virtual Environment:
    
    On windows:
-   - **venv\Scripts\activate**
+   - **`venv\Scripts\activate`**
    
    On macOS or Linux:
-   - **source venv/bin/activate**
+   - **`source venv/bin/activate`**
 6. Install the required dependencies:
-   - **pip install -r requirements.txt**
+   - **`pip install -r requirements.txt`**
 
 ## Running Experiments
 
 To run experiments, use the following command structure from the ML_COURSEWORK directory:
 
-**python main.py ML_COURSEWORK/data/data.csv --experiment <EXPERIMENT_NAME>**
+**`python main.py ML_COURSEWORK/data/data.csv --experiment <EXPERIMENT_NAME>`**
 
 Where <DATA_FILE> is the path to the dataset and <EXPERIMENT_NAME> is one of the following:
 
-**base** - Runs the baseline experiment.
-**cov1** - Runs the covariance split 1 experiment.
-**cov2** - Runs the covariance split 2 experiment.
-**cov3** - Runs the covariance split 3 experiment.
-**cov4** - Runs the covariance split 4 experiment.
+**`base`** - Runs the baseline experiment.
+**`cov1`** - Runs the covariance split 1 experiment.
+**`cov2`** - Runs the covariance split 2 experiment.
+**`cov3`** - Runs the covariance split 3 experiment.
+**`cov4`** - Runs the covariance split 4 experiment.
 
 If no experiment name is provided, all experiments will run sequentially.
 
 **Example**
-- python main.py Content/data/data.csv --experiment base
+- **`python main.py Content/data/data.csv --experiment base`**
 
 
 ## Expected Outcomes
 Each script will output the performance measures to the console. The execution time for all experiments should not exceed 10 minutes on a standard consumer desktop machine (CPU only). Each individual experiment will take approximately 2 minutes to run (inlcuding cross_validation and hyperparameter optimisation).
 
-The experiment shows that our initial assumption of windowing the dataset to improve model performance was innacurate. The best model is created in Experiment 2 which is using the covariances over the entire dataset (covs_split_1). This model is significantly more accurate (lower log-loss) than the following time splits.
+The experiment shows that our initial assumption of windowing the dataset to improve model performance was innacurate. The best model is created in Experiment 2 which is using the covariances over the entire dataset **`(covs_split_1)`**. This model is significantly more accurate **`(lower log-loss)`** than the following time splits.
 
 ## Dependencies
 The project uses numpy, scipy, pandas, argparse, and sklearn libraries as allowed by the coursework specification. The sklearn library is used only for the functionalities specified in Section 1.6 of the coursework brief.
