@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains the code for a machine learning classification project as part of the Foundations of Machine Learning course at UCL. This project involves using multivariate Gait data from the **UC Irvine Machine Learning Repository** (link provided below) and aims to develop a classification algorithm using a **Gradient Boosting Classifier** to identify lowerbody bracing conditions. The project structure allows for running a series of experiments individually or sequentially through a command-line interface. More details regarding using this interface will be provided below.
+This repository contains the code for a machine learning classification project, part of the Foundations of Machine Learning module at UCL. This project involves using multivariate Gait data from the **UC Irvine Machine Learning Repository** (link provided below) and aims to develop a classification algorithm using a **Gradient Boosting Classifier** to identify lowerbody bracing conditions. The project structure allows for running a series of experiments individually or sequentially through a command-line interface. More details regarding using this interface will be provided below.
 
 ## Project Structure
 
@@ -59,20 +59,20 @@ To set up the project environment, follow these steps:
 1. Ensure that Python 3.8 or above is installed on your system.
 2. Clone the repository to your local machine.
 3. Navigate to the project directory and create a virtual environment:
-   - ***python -m venv venv***
+   - **python -m venv venv**
 4. Activate the Virtual Environment:
    On windows:
-   - ***venv\Scripts\activate***
+   - **venv\Scripts\activate**
      On macOS or Linux:
-   - ***source venv/bin/activate***
+   - **source venv/bin/activate**
 6. Install the required dependencies:
-   - ***pip install -r requirements.txt***
+   - **pip install -r requirements.txt**
 
 ## Running Experiments
 
 To run experiments, use the following command structure from the ML_COURSEWORK directory:
 
-***python main.py ML_COURSEWORK/data/data.csv --experiment <EXPERIMENT_NAME>***
+**python main.py ML_COURSEWORK/data/data.csv --experiment <EXPERIMENT_NAME>**
 
 Where <DATA_FILE> is the path to the dataset and <EXPERIMENT_NAME> is one of the following:
 
