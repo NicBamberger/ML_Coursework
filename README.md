@@ -9,7 +9,8 @@ This repository contains the code for a machine learning classification project 
 - **Data**: This directory holds the Multivariate Gait Dataset obtained from the UC Irvine Machine Learning Repository (https://archive.ics.uci.edu/dataset/760/multivariate+gait+data).
 
 - **File System**: 
-'''
+
+```
 ML_COURSEWORK/
 │
 ├── Content/
@@ -33,7 +34,7 @@ ML_COURSEWORK/
 ├── main.py
 ├── README.md
 └── requirements.txt
-'''
+ ```
 
 1. **`main.py`**
    - The main runner script that uses command-line arguments to execute specific experiments.
