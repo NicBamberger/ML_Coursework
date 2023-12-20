@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
+import time
 from sklearn.metrics import log_loss, accuracy_score
-
 from sklearn import ensemble
+import scipy.stats
 import os
 
 N_SUBJECTS = 10
@@ -19,6 +20,70 @@ N_ESTIMATORS = 500
 # functions that our group have created
 class Gx:
 
+    start = time.time()
+    SEED = 123
+    np.random.seed(SEED)
+
+
+    def load_data(datafile_path):
+        df = pd.read_csv(datafile_path)
+        matrix, target = Gx.processing(df)
+
+        return matrix, target
+
+    def feature_sets(matrix, n_splits=4):
+        # create a variable number of features by splitting the data into time-bands and then calculate statistics on each time band
+        n_splits = 4
+        feature_sets = Gx.create_feature_sets(matrix, n_splits)
+        feature_set_names = ["base"] + [f"covs_split_{i}" for i in range(1, n_splits + 1)]
+        feature_set_dict = dict(zip(feature_set_names, feature_sets))
+
+        return feature_set_dict
+
+    def apply_grid_search(features, target):
+        # Apply grid search to the provided feature set
+        all_errors, optimal = Gx.grid_search(features, target)
+        
+        # Since we're only dealing with one feature set, we don't need a list
+        feature_valid_error = optimal.mean_error
+        
+        return all_errors, optimal, feature_valid_error
+
+    def calculate_confidence_interval(optimal_hps):
+        # Calculate the confidence interval for the provided optimal hyperparameters
+
+        z = scipy.stats.norm.ppf(0.975)  # Two-tailed 95% confidence, so 0.975 in each tail
+        mu = optimal_hps.mean_error
+        sigma = optimal_hps.stdev_error
+        lower_conf = mu - z * sigma
+        upper_conf = mu + z * sigma
+
+        # Ensure the lower bound is not negative
+        lower_conf = round(max(0, lower_conf), 3)
+        upper_conf = round(upper_conf, 3)
+        conf_interval = (lower_conf, upper_conf)
+
+        return mu, conf_interval
+
+    def test_results(
+        features, 
+        target, 
+        optimal_hps
+        ):
+
+        X_train, y_train, X_test, y_test = Gx.train_test_split(features, target)
+
+        model = ensemble.GradientBoostingClassifier(
+            n_estimators=N_ESTIMATORS, 
+            max_depth=int(optimal_hps.loc["max_depth"]), 
+            min_impurity_decrease=float(optimal_hps.loc["min_impurity_decrease"]), 
+            loss="log_loss"
+            )
+
+        error_test, y_test_probs = Gx.run_model(X_train, y_train, X_test, y_test, model)
+
+        return error_test, y_test_probs
+        
     def processing(
         df: pd.DataFrame
     ) -> pd.DataFrame:
@@ -138,8 +203,8 @@ class Gx:
     def grid_search(features, target):
         
         # try 5 X 5
-        max_depth_list = np.linspace(3, 11, 5)
-        min_impurity_decrease_list = np.linspace(0, 0.1, 5)
+        max_depth_list = np.linspace(3, 11, 2)
+        min_impurity_decrease_list = np.linspace(0, 0.1, 2)
 
         n_hyperparamter_choices = len(max_depth_list) * len(min_impurity_decrease_list)
         all_errors = pd.DataFrame(index=range(n_hyperparamter_choices), 
