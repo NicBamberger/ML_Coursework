@@ -2,85 +2,107 @@
 
 ## Overview
 
-This repository contains the code and documentation for a time series Machine Learning project focused on classifying lowerbody bracing conditions using Multivariate Gait Data. The project utilizes the **Gradient Boosting Classifier** within an ensemble learning framework for predictive modeling.
+This repository contains the code for a machine learning classification project as part of the Foundations of Machine Learning course at UCL. This project involves using multivariate Gait data from the **UC Irvine Machine Learning Repository** (link provided below) and aims to develop a classification algorithm using a **Gradient Boosting Classifier** to identify lowerbody bracing conditions. The project structure allows for running a series of experiments individually or sequentially through a command-line interface. More details regarding using this interface will be provided below.
 
 ## Project Structure
 
-- **data**: This directory holds the Multivariate Gait Dataset obtained from the UC Irvine Machine Learning Repository (https://archive.ics.uci.edu/dataset/760/multivariate+gait+data).
-- **notebooks**: This repository includes 3 files:
+- **Data**: This directory holds the Multivariate Gait Dataset obtained from the UC Irvine Machine Learning Repository (https://archive.ics.uci.edu/dataset/760/multivariate+gait+data).
 
-1. **`pipeline.py`**
-   - This file defines the core functionalities of the machine learning pipeline, encapsulated within the `Gx` class. Key functions include data processing, feature generation, cross-validation, grid search, and model training.
+- **File System**: 
 
-2. **`experiments.py`**
-   - This file orchestrates the entire Machine Learning process. It uses functions from `pipeline.py` to load data, generate feature sets, perform grid search, choose the best model, and test the results. The `main()` function ties everything together for cohesive execution.
+ML_COURSEWORK/
+│
+├── Content/
+│   ├── data/
+│   │   └── data.csv
+│   │
+│   ├── experiments/
+│   │   ├── __init__.py
+│   │   ├── experiment_base_0.py
+│   │   ├── experiment_cov_split_1.py
+│   │   ├── experiment_cov_split_2.py
+│   │   ├── experiment_cov_split_3.py
+│   │   └── experiment_cov_split_4.py
+│   │
+│   └── functions/
+│       ├── __init__.py
+│       └── pipeline.py
+│
+├── venv/
+├── .gitignore
+├── main.py
+├── README.md
+└── requirements.txt
 
-3. **`tests.ipynb`**
-   - This Jupyter Notebook is designed for interactive testing and experimentation. It loads a small dataset, processes the data using the `Gx` class, creates feature sets, performs grid search, and tests the resulting model. It also includes visualizations to aid in understanding the data and results.
+1. **`main.py`**
+   - The main runner script that uses command-line arguments to execute specific experiments.
 
-## Getting Started
+2. **`data`**
+   - This directory contains the dataset data.csv used for the machine learning experiments.
 
-### Prerequisites
+3. **`experiments/`**
+   - Contains individual Python scripts for each experiment (experiment_base_0.py, experiment_cov_split_1.py, etc.).
 
-- Python 3.x
-- Required Python packages: `numpy`, `pandas`, `scikit-learn`, `matplotlib`, `scipy`
+4. **`functions/`**
+   - Includes pipeline.py which contains the Gx class with all methods required for data processing, feature extraction, model training, and evaluation.
+
+5. **`functions/`**
+   - Lists all the necessary Python dependencies for the project.
 
 
-## Getting Started
+## Project Structure
 
-1. Clone the repository:
+To set up the project environment, follow these steps:
 
-   ```bash
-   git clone https://github.com/your-username/multivariate-gait-classification.git
-   cd multivariate-gait-classification
-   ```
+1. Ensure that Python 3.8 or above is installed on your system.
+2. Clone the repository to your local machine.
+3. Navigate to the project directory and create a virtual environment:
+   - ***python -m venv venv***
+4. Activate the Virtual Environment:
+   On windows:
+      - ***venv\Scripts\activate***
+   On macOS or Linux:
+      - ***source venv/bin/activate***
+5. Install the required dependencies:
+   - ***pip install -r requirements.txt***
 
-2. Set up a virtual environment (optional but recommended):
+## Running Experiments
 
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-   ```
+To run experiments, use the following command structure from the ML_COURSEWORK directory:
 
-3. Install dependencies:
+***python main.py ML_COURSEWORK/data/data.csv --experiment <EXPERIMENT_NAME>***
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+Where <DATA_FILE> is the path to the dataset and <EXPERIMENT_NAME> is one of the following:
 
-This will execute the machine learning pipeline, performing data processing, feature generation, grid search, and model evaluation.
+**base** - Runs the baseline experiment.
+**cov1** - Runs the covariance split 1 experiment.
+**cov2** - Runs the covariance split 2 experiment.
+**cov3** - Runs the covariance split 3 experiment.
+**cov4** - Runs the covariance split 4 experiment.
 
-4. Explore the Jupyter notebooks in the `notebooks` directory for data analysis and model development.
+If no experiment name is provided, all experiments will run sequentially.
 
-## Usage
+**Example**
+- python main.py Content/data/data.csv --experiment base
 
-1. **Run the Experiment:**
 
-   ```bash
-   python experiments.py
-   ```
+## Expected Outcomes
+Each script will output the performance measures to the console. The execution time for all experiments should not exceed 10 minutes on a standard consumer desktop machine (CPU only). Each individual experiment will take approximately 2 minutes (inlcuding cross_validation and hyperparameter optimisation)
 
-   This will execute the machine learning pipeline, performing data processing, feature generation, grid search, and model evaluation.
+## Dependencies
+The project uses numpy, scipy, pandas, argparse, and sklearn libraries as allowed by the coursework specification. The sklearn library is used only for the functionalities specified in Section 1.6 of the coursework brief.
 
-2. **Interactive Testing (Optional):**
+## Reproducibility
 
-   Open and run the Jupyter Notebook `tests.ipynb` to interactively test and experiment with the pipeline on a small dataset.
+For reproducibility, a random seed (SEED = 123)is set within the Gx class in pipeline.py. This ensures that the results are consistent across different runs.
+
+## Reusability 
+The code is designed with modularity in mind, facilitating the extension or reuse of functionalities. New evaluation methods can be added without rewriting the model fitting code. Users can explore different parameters of the model by replacing these within the grid search function (pipeline.py).
 
 ## Contributions
 
 We welcome contributions! Please let us know if you find anything wrong or have an improvement in mind, by opening an issue or creating a pull request.
 
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-```
-
-Remember to include a `LICENSE` file in your project directory if you choose a license for your project. You can replace the `LICENSE` link in the README with a link to your actual license file.
-
-Feel free to customize the README according to your specific project details and structure.
-```
 ## Acknowledgements
 
 We would like to thank Dr Luke Dickens for helping us choose a suitable dataset and providing us with the foundational knowledge to create this project.
-
----
