@@ -61,7 +61,7 @@ To set up the project environment, follow these steps:
 4. Activate the Virtual Environment:
    On windows:
    - ***venv\Scripts\activate***
-   On macOS or Linux:
+     On macOS or Linux:
    - ***source venv/bin/activate***
 6. Install the required dependencies:
    - ***pip install -r requirements.txt***
