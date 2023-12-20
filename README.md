@@ -100,10 +100,10 @@ The project uses numpy, scipy, pandas, argparse, and sklearn libraries as allowe
 
 ## Reproducibility
 
-For reproducibility, a random seed (SEED = 123)is set within the Gx class in pipeline.py. This ensures that the results are consistent across different runs.
+For reproducibility, a random seed **`(SEED = 123)`** is set within the Gx class in pipeline.py. This ensures that the results are consistent across different runs.
 
 ## Reusability 
-The code is designed with modularity in mind, facilitating the extension or reuse of functionalities. New evaluation methods can be added without rewriting the model fitting code. Users can explore different parameters of the model by replacing these within the grid search function (pipeline.py).
+The code is designed with modularity in mind, facilitating the extension or reuse of functionalities. New evaluation methods can be added without rewriting the model fitting code. Users can explore different parameters of the model by replacing these within the grid search function **`(pipeline.py)`**`.
 
 ## Contributions
 
