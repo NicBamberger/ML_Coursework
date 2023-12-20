@@ -9,7 +9,7 @@ This repository contains the code for a machine learning classification project 
 - **Data**: This directory holds the Multivariate Gait Dataset obtained from the UC Irvine Machine Learning Repository (https://archive.ics.uci.edu/dataset/760/multivariate+gait+data).
 
 - **File System**: 
-
+'''
 ML_COURSEWORK/
 │
 ├── Content/
@@ -33,6 +33,7 @@ ML_COURSEWORK/
 ├── main.py
 ├── README.md
 └── requirements.txt
+'''
 
 1. **`main.py`**
    - The main runner script that uses command-line arguments to execute specific experiments.
@@ -87,7 +88,9 @@ If no experiment name is provided, all experiments will run sequentially.
 
 
 ## Expected Outcomes
-Each script will output the performance measures to the console. The execution time for all experiments should not exceed 10 minutes on a standard consumer desktop machine (CPU only). Each individual experiment will take approximately 2 minutes (inlcuding cross_validation and hyperparameter optimisation)
+Each script will output the performance measures to the console. The execution time for all experiments should not exceed 10 minutes on a standard consumer desktop machine (CPU only). Each individual experiment will take approximately 2 minutes to run (inlcuding cross_validation and hyperparameter optimisation).
+
+The experiment shows that our initial assumption of windowing the dataset to improve model performance was innacurate. The best model is created in Experiment 2 which is using the covariances over the entire dataset (covs_split_1). This model is significantly more accurate (lower log-loss) than the following time splits.
 
 ## Dependencies
 The project uses numpy, scipy, pandas, argparse, and sklearn libraries as allowed by the coursework specification. The sklearn library is used only for the functionalities specified in Section 1.6 of the coursework brief.
