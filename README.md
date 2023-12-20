@@ -55,7 +55,7 @@ To set up the project environment, follow these steps:
 1. Ensure that **Python 3.8** or above is installed on your system.
 2. Clone the repository to your local machine.
 3. Navigate to the project directory and create a virtual environment:
-   - **`python -m venv venv`**
+   - **`python3 -m venv venv`**
 4. Activate the Virtual Environment
    - **On windows**
       - **`venv\Scripts\activate`**
