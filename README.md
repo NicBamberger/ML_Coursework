@@ -78,11 +78,11 @@ To run experiments, use the following command structure from the ML_COURSEWORK d
 
 Where <DATA_FILE> is the path to the dataset and <EXPERIMENT_NAME> is one of the following:
 
-**`base`** - Runs the baseline experiment.
-**`cov1`** - Runs the covariance split 1 experiment.
-**`cov2`** - Runs the covariance split 2 experiment.
-**`cov3`** - Runs the covariance split 3 experiment.
-**`cov4`** - Runs the covariance split 4 experiment.
+- **`base`** - Runs the baseline experiment.
+- **`cov1`** - Runs the covariance split 1 experiment.
+- **`cov2`** - Runs the covariance split 2 experiment.
+- **`cov3`** - Runs the covariance split 3 experiment.
+- **`cov4`** - Runs the covariance split 4 experiment.
 
 If no experiment name is provided, all experiments will run sequentially.
 
