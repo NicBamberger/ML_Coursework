@@ -81,7 +81,7 @@ Where <DATA_FILE> is the path to the dataset and <EXPERIMENT_NAME> is one of the
 If no experiment name is provided, all experiments will run sequentially.
 
 **Example**
-- **`python main.py Content/data/data.csv --experiment base`**
+- **`python main.py ML_COURSEWORK/data/data.csv --experiment base`**
 
 
 ## Expected Outcomes
