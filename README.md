@@ -47,7 +47,6 @@ ML_COURSEWORK/
 5. **`functions/`**
    - Lists all the necessary Python dependencies for the project.
 
-
 ## Project Structure
 
 To set up the project environment, follow these steps:
@@ -83,6 +82,9 @@ If no experiment name is provided, all experiments will run sequentially.
 **Example**
 - **`python main.py ML_COURSEWORK/data/data.csv --experiment base`**
 
+
+## Visualistions
+The Report_Plots.ipynb provides useful visuals that will provide a better understanding of the dataset and the report based on this.
 
 ## Expected Outcomes
 Each script will output the performance measures to the console. The execution time for all experiments should not exceed 10 minutes on a standard consumer desktop machine (CPU only). Each individual experiment will take approximately 2 minutes to run (inlcuding **cross_validation** and **hyperparameter optimisation**).
