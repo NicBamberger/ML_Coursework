@@ -83,7 +83,7 @@ If no experiment name is provided, all experiments will run sequentially.
 - **`python main.py ML_COURSEWORK/data/data.csv --experiment base`**
 
 
-## Visualistions
+## Visualisations
 The Report_Plots.ipynb provides useful visuals that will provide a better understanding of the dataset and the report based on this.
 
 ## Expected Outcomes
